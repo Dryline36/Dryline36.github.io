@@ -1,0 +1,94 @@
+[
+ {
+  "id": "last-supper",
+  "name": "The Last Supper",
+  "mode": "blur",
+  "cx": 0.5,
+  "color": "#9a7468",
+  "frames": 8,
+  "durations": [
+   100,
+   100,
+   100,
+   100,
+   100,
+   100,
+   100,
+   100
+  ],
+  "anchor": "center"
+ },
+ {
+  "id": "holy-glitch",
+  "name": "Holy Glitch",
+  "mode": "blur",
+  "cx": 0.5,
+  "color": "#472f33",
+  "frames": 6,
+  "durations": [
+   110,
+   110,
+   110,
+   110,
+   110,
+   110
+  ],
+  "anchor": "center"
+ },
+ {
+  "id": "conclave",
+  "name": "The Conclave",
+  "mode": "blur",
+  "cx": 0.5,
+  "color": "#747d48",
+  "frames": 5,
+  "durations": [
+   70,
+   70,
+   70,
+   70,
+   70
+  ],
+  "anchor": "center"
+ },
+ {
+  "id": "banks-are",
+  "name": "Banks Are\u2026",
+  "mode": "blur",
+  "cx": 0.5,
+  "color": "#6b5035",
+  "frames": 5,
+  "durations": [
+   110,
+   110,
+   110,
+   110,
+   110
+  ],
+  "anchor": "center"
+ },
+ {
+  "id": "prixville-cruise",
+  "name": "Prixville Cruise",
+  "mode": "color",
+  "cx": 0.5,
+  "color": "#e93423",
+  "frames": 1,
+  "durations": [
+   100
+  ],
+  "anchor": "left"
+ },
+ {
+  "id": "lowrider-lot",
+  "name": "Lowrider Lot",
+  "mode": "color",
+  "cx": 0.5,
+  "color": "#7f5d2c",
+  "frames": 1,
+  "durations": [
+   100
+  ],
+  "anchor": "left"
+ }
+]
