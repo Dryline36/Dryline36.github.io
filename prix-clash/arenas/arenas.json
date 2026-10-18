@@ -2,9 +2,9 @@
  {
   "id": "last-supper",
   "name": "The Last Supper",
-  "mode": "blur",
-  "cx": 0.5,
-  "color": "#9a7468",
+  "fy": 0.5002,
+  "w": 1440,
+  "h": 900,
   "frames": 8,
   "durations": [
    100,
@@ -15,15 +15,14 @@
    100,
    100,
    100
-  ],
-  "anchor": "center"
+  ]
  },
  {
   "id": "holy-glitch",
   "name": "Holy Glitch",
-  "mode": "blur",
-  "cx": 0.5,
-  "color": "#472f33",
+  "fy": 0.5002,
+  "w": 1440,
+  "h": 900,
   "frames": 6,
   "durations": [
    110,
@@ -32,15 +31,14 @@
    110,
    110,
    110
-  ],
-  "anchor": "center"
+  ]
  },
  {
   "id": "conclave",
   "name": "The Conclave",
-  "mode": "blur",
-  "cx": 0.5,
-  "color": "#747d48",
+  "fy": 0.4997,
+  "w": 1440,
+  "h": 900,
   "frames": 5,
   "durations": [
    70,
@@ -48,15 +46,14 @@
    70,
    70,
    70
-  ],
-  "anchor": "center"
+  ]
  },
  {
   "id": "banks-are",
   "name": "Banks Are\u2026",
-  "mode": "blur",
-  "cx": 0.5,
-  "color": "#6b5035",
+  "fy": 0.5001,
+  "w": 1440,
+  "h": 900,
   "frames": 5,
   "durations": [
    110,
@@ -64,31 +61,28 @@
    110,
    110,
    110
-  ],
-  "anchor": "center"
+  ]
  },
  {
   "id": "prixville-cruise",
   "name": "Prixville Cruise",
-  "mode": "color",
-  "cx": 0.5,
-  "color": "#e93423",
+  "fy": 0.5004,
+  "w": 1170,
+  "h": 731,
   "frames": 1,
   "durations": [
    100
-  ],
-  "anchor": "left"
+  ]
  },
  {
   "id": "lowrider-lot",
   "name": "Lowrider Lot",
-  "mode": "color",
-  "cx": 0.5,
-  "color": "#7f5d2c",
+  "fy": 0.5004,
+  "w": 1408,
+  "h": 880,
   "frames": 1,
   "durations": [
    100
-  ],
-  "anchor": "left"
+  ]
  }
 ]
