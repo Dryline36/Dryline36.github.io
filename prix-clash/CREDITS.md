@@ -25,4 +25,4 @@ Sources:
 
 ## Sound effects
 
-All sound effects are synthesised at runtime with the Web Audio API (no recorded samples).
+All sound effects are original and synthesised (no recorded samples). Most are generated at runtime with the Web Audio API; the champion hit sounds were synthesised procedurally for Prix Clash (numpy/scipy) and are bundled as tiny MP3 clips.
