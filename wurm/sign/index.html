@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WURM Bot · Verify wallet</title><meta name="robots" content="noindex">
+<style>
+:root{--bg:#0d0f14;--card:#161a22;--line:#262c38;--txt:#e8ecf3;--mut:#8b94a7;--acc:#4f8cff;--ok:#2ecc71;--warn:#ffb020}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:16px;padding-bottom:40px}
+main{max-width:520px;margin:0 auto}h1{font-size:22px;margin:8px 0 4px}p{margin:6px 0}.mut{color:var(--mut);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+.warn{border-color:#5a4410;background:#1f1a0e;color:#ffd98a;font-size:14px}
+button,.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;border:0;border-radius:12px;background:var(--acc);color:#fff;font-size:17px;font-weight:600;text-decoration:none;cursor:pointer;margin:8px 0}
+button:disabled{opacity:.5}.sec{background:#232a37;color:var(--txt)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid .btn{margin:0;font-size:15px;min-height:48px}
+pre,textarea{width:100%;background:#0a0c10;border:1px solid var(--line);border-radius:10px;color:var(--txt);padding:10px;font:13px/1.4 ui-monospace,Menlo,monospace;white-space:pre-wrap;word-break:break-all;margin:8px 0}
+textarea{min-height:120px;font-size:15px}.hide{display:none}.err{color:#ff6b6b}.okc{color:var(--ok)}
+details summary{cursor:pointer;color:var(--mut)}
+</style></head><body><main>
+<h1>🔐 WURM Bot · Verify wallet</h1>
+<p class="mut">Prixville holder verification</p>
+<div class="card warn">⚠️ <b>Never enter your seed phrase or private key.</b> This page only asks your wallet to <b>sign a message</b>. It sends no transaction, costs no gas, and grants no approvals.</div>
+
+<div id="bad" class="card hide"><p class="err"><b>No verification message found.</b></p><p>Go back to Discord, tap <b>Verify wallet</b>, and use the <b>Open sign page</b> button.</p></div>
+
+<div id="s1" class="card hide">
+  <p><b>Step 1: Connect your wallet</b></p>
+  <div id="inj"></div>
+  <button id="wcBtn" class="sec hide">🔗 WalletConnect (other wallets)</button>
+  <div id="open"><p class="mut" id="openHint">On your phone? Open this page inside your wallet app:</p>
+  <div class="grid">
+    <a class="btn sec" data-w="metamask">🦊 MetaMask</a><a class="btn sec" data-w="coinbase">🔵 Coinbase</a>
+    <a class="btn sec" data-w="trust">🛡️ Trust</a><a class="btn sec" data-w="rainbow">🌈 Rainbow</a>
+    <a class="btn sec" data-w="phantom">👻 Phantom</a><a class="btn sec" data-w="okx">⚫ OKX</a>
+  </div>
+  <p class="mut">Other wallet (Rabby, Zerion, Uniswap, Ledger Live…)? Copy this page link and paste it into your wallet's built-in browser.</p>
+  <button id="copyLink" class="sec">📋 Copy page link</button></div>
+</div>
+
+<div id="s2" class="card hide">
+  <p><b>Step 2: Sign</b></p><p class="mut">Connected: <span id="addr"></span></p>
+  <button id="signBtn">✍️ Sign message</button><p id="err" class="err"></p>
+</div>
+
+<div id="s3" class="card hide">
+  <p class="okc"><b>✅ Signed! Copy your signature</b></p>
+  <textarea id="sig" readonly></textarea>
+  <button id="copySig">📋 Copy signature</button>
+  <a class="btn sec" id="back" href="#">↩️ Back to Discord</a>
+  <p class="mut">In Discord tap <b>Paste signature</b> and paste it. Your code is valid for 15 minutes from when you started.</p>
+</div>
+
+<div class="card"><details><summary>Message you're signing</summary><pre id="msg"></pre></details></div>
+<p class="mut">Static page, no server. Your signature is only shown to you.</p>
+</main>
+<script type="module">
+const WC_PROJECT_ID = ''; // free projectId from cloud.reown.com enables WalletConnect
+const DISCORD_APP = 'discord://-/channels/1472383088205238386/1566964776800620615';
+const DISCORD_WEB = 'https://discord.com/channels/1472383088205238386/1566964776800620615';
+const $ = (id) => document.getElementById(id);
+const q = new URLSearchParams(location.search);
+function b64u(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return new TextDecoder().decode(Uint8Array.from(atob(s),c=>c.charCodeAt(0)));}
+let message=''; try{ message=q.get('m')?b64u(q.get('m')):''; }catch{}
+const valid = /^WURM Bot wallet verification\n/.test(message) && /\nNonce: [0-9a-f]+\n/.test(message);
+if(!valid){ $('bad').classList.remove('hide'); } else { $('s1').classList.remove('hide'); $('msg').textContent=message; }
+
+const here = location.href, hostPath = here.replace(/^https?:\/\//,''), enc = encodeURIComponent(here);
+const links = {
+  metamask:`https://metamask.app.link/dapp/${hostPath}`,
+  coinbase:`https://go.cb-w.com/dapp?cb_url=${enc}`,
+  trust:`https://link.trustwallet.com/open_url?coin_id=60&url=${enc}`,
+  rainbow:`https://rnbwapp.com/dapp?url=${enc}`,
+  phantom:`https://phantom.app/ul/browse/${enc}?ref=${encodeURIComponent(location.origin)}`,
+  okx:`okx://wallet/dapp/url?dappUrl=${enc}`,
+};
+document.querySelectorAll('[data-w]').forEach(a=>a.href=links[a.dataset.w]);
+async function copy(t,btn){ try{await navigator.clipboard.writeText(t);}catch{const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();} const o=btn.textContent;btn.textContent='✅ Copied';setTimeout(()=>btn.textContent=o,2000); }
+$('copyLink').onclick=()=>copy(here,$('copyLink'));
+
+// ---- injected wallets (EIP-6963 + window.ethereum) ----
+const found = new Map();
+function addProvider(info, provider){
+  const key = info.rdns||info.name; if(found.has(key)) return; found.set(key,provider);
+  const b=document.createElement('button'); b.innerHTML=(info.icon?`<img src="${info.icon}" width="24" height="24" alt="">`:'👛')+' '+(info.name||'Browser wallet').replace(/[<>]/g,'');
+  b.onclick=()=>connect(provider); $('inj').appendChild(b);
+  $('openHint').textContent='Or open this page in a different wallet app:';
+}
+window.addEventListener('eip6963:announceProvider', e=>addProvider(e.detail.info, e.detail.provider));
+window.dispatchEvent(new Event('eip6963:requestProvider'));
+setTimeout(()=>{ if(!found.size && window.ethereum) addProvider({name:'Connect wallet',rdns:'injected'}, window.ethereum); },400);
+
+let prov, account;
+async function connect(p){
+  try{ const accs = await p.request({method:'eth_requestAccounts'}); prov=p; account=accs[0];
+    $('addr').textContent=account; $('s1').classList.add('hide'); $('s2').classList.remove('hide');
+  }catch(e){ alert('Connection cancelled: '+(e.message||e)); }
+}
+function hex(s){return '0x'+[...new TextEncoder().encode(s)].map(b=>b.toString(16).padStart(2,'0')).join('');}
+$('signBtn').onclick=async()=>{
+  $('err').textContent=''; $('signBtn').disabled=true;
+  try{ let sig;
+    try{ sig = await prov.request({method:'personal_sign',params:[hex(message),account]}); }
+    catch(e){ if(e && e.code===4001) throw e; sig = await prov.request({method:'personal_sign',params:[message,account]}); }
+    if(!/^0x[0-9a-fA-F]{130}$/.test(sig)) throw new Error('Wallet returned an unexpected signature format');
+    $('sig').value=sig; $('s2').classList.add('hide'); $('s3').classList.remove('hide');
+  }catch(e){ $('err').textContent = e?.code===4001 ? 'You rejected the request. Tap Sign again.' : 'Signing failed: '+(e.message||e); }
+  $('signBtn').disabled=false;
+};
+$('copySig').onclick=()=>copy($('sig').value,$('copySig'));
+$('back').onclick=(e)=>{ e.preventDefault(); location.href=DISCORD_APP; setTimeout(()=>{ if(!document.hidden) location.href=DISCORD_WEB; },1200); };
+
+// ---- WalletConnect (only when a projectId is configured) ----
+if(WC_PROJECT_ID && valid){
+  $('wcBtn').classList.remove('hide');
+  $('wcBtn').onclick=async()=>{
+    $('wcBtn').disabled=true; $('wcBtn').textContent='Loading…';
+    try{ const { EthereumProvider } = await import('https://esm.sh/@walletconnect/ethereum-provider@2');
+      const p = await EthereumProvider.init({ projectId:WC_PROJECT_ID, chains:[1], showQrModal:true, metadata:{name:'WURM Bot',description:'Prixville wallet verification',url:location.origin,icons:[]} });
+      await p.connect(); await connect(p);
+    }catch(e){ alert('WalletConnect failed: '+(e.message||e)); }
+    $('wcBtn').disabled=false; $('wcBtn').textContent='🔗 WalletConnect (other wallets)';
+  };
+}
+</script></body></html>
